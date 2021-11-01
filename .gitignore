@@ -1,2 +1,8 @@
 
 ./frontend/web/parcel-tracking/src/auth/auth_config.json
+# Ignore all files or folders that start with a dot .
+.*
+# Ignore pycache folders
+__pycache__/
+#  Ignore all files that start with a dot . but .gitignore
+!/.gitignore
