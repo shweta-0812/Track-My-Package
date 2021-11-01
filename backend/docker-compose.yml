@@ -1,0 +1,42 @@
+version: '2.2'
+services:
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.14.2
+    container_name: parcelTrackingEs01
+    environment:
+      - node.name=es01
+      - cluster.name=es-docker-cluster
+      - cluster.initial_master_nodes=es01
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - esdata:/usr/share/elasticsearch/parcel_tracking/data
+    ports:
+      - 9200:9200
+    networks:
+      - esnetwork
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:7.14.2
+    container_name: parcelTrackingKibana01
+    ports:
+      - 5601:5601
+    volumes:
+      - kibanadata:/usr/share/kibana/parcel_tracking/data
+    networks:
+      - esnetwork
+
+
+volumes:
+  esdata:
+    driver: local
+  kibanadata:
+    driver: local
+
+networks:
+  esnetwork:
+    driver: bridge

@@ -1,0 +1,14 @@
+{
+  "name": "web-workspace",
+  "version": "1.0.0",
+  "scripts": {
+  "clean-cache": "rm -rf ../**/.cache",
+  "serve": "yarn clean-cache && vue-cli-service serve",
+  "build": "vue-cli-service build",
+  "lint": "vue-cli-service lint"
+},
+  "dependencies": {
+    "@vue/cli": "^4.5.13",
+    "cross-env": "5.0.5"
+  }
+}
