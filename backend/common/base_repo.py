@@ -17,8 +17,6 @@ async def create(klass: str, doc_data=Any, doc_version=1):
     doc = dict(
         **doc_data,
         doc_version=doc_version,
-        created_at=get_current_timestamp(),
-        updated_at=get_current_timestamp(),
     )
     return await ESService.ingest(index=index, doc=doc)
 
@@ -38,6 +36,9 @@ async def create_index(klass: str, settings: Any, mappings: Any):
         index=index, settings=settings, mappings=mappings
     )
 
+async def delete_index(klass: str) -> Any:
+    index = generate_document_index_from_klass(klass=klass)
+    return await ESService.delete_index(index=index)
 
 async def get(klass: str) -> Any:
     index = generate_document_index_from_klass(klass=klass)
@@ -50,10 +51,15 @@ async def get_all(klass: str) -> Any:
 
 async def get_latest(klass: str) -> Any:
     index = generate_document_index_from_klass(klass=klass)
-    return await ESService.search(
-        index=index,
-        query={"size": 1, "sort": {"date": "desc"}, "query": {"match_all": {}}},
-    )
+    try:
+        return await ESService.search(
+            index=index,
+            query={"size": 1, "sort": {"date": "desc"}, "query": {"match_all": {}}},
+        )
+    except Exception as e:
+        print(e)
+        return None
+
 
 
 async def update(klass, index, doc, doc_version):

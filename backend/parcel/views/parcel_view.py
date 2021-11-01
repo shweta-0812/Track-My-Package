@@ -20,6 +20,11 @@ async def create_index():
     return await parcel_interactor.create_index()
 
 
+@router.get("/delete-index/")
+async def delete_index():
+    return await parcel_interactor.delete_index()
+
+
 @router.get("/check-index/")
 async def check_index():
     return await parcel_interactor.does_index_exists()
@@ -27,9 +32,7 @@ async def check_index():
 
 @router.get("/latest/")
 async def get_latest_parcel():
-    latest_parcel = await parcel_interactor.get_latest_parcel()
-    id = latest_parcel["hits"]["hits"][0]["_id"]
-    return id
+    return await parcel_interactor.get_latest_parcel()
 
 
 @router.post("/")

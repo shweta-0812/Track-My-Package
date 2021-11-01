@@ -23,6 +23,7 @@ aiohttp = "^3.7.4"
 loguru = "^0.5.3"
 beautifulsoup4 = "^4.10.0"
 numpy = "1.21.0"
+arrow = "^1.2.1"
 
 [tool.poetry.dev-dependencies]
 

@@ -21,10 +21,14 @@ async def create_index():
                 "delivery_partner": {"type": "integer"},
                 "status": {"type": "integer"},
                 "date": {"type": "integer"},
+                "created_at": {"type": "integer"},
+                "updated_at": {"type": "integer"},
             }
         },
     )
 
+async def delete_index():
+    return await base_repo.delete_index(klass='parcel')
 
 async def cat_indices():
     return await base_repo.cat_indices()
@@ -39,3 +43,4 @@ async def get_parcels():
 
 async def get_latest_parcel():
     return await base_repo.get_latest(klass="parcel")
+

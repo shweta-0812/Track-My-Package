@@ -46,6 +46,11 @@ async def create_index(index: str, settings: Any, mappings: Any) -> Any:
         await async_es_client.indices.create(index=index, body=body)
     return None
 
+async def delete_index(index: str) -> Any:
+    if await async_es_client.indices.exists(index=index):
+        await async_es_client.indices.delete(index=index)
+    return None
+
 
 @es_exception_handler
 async def cat_indices(index: Optional[str] = None) -> Any:

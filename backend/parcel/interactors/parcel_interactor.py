@@ -1,3 +1,4 @@
+import datetime
 from typing import Any
 
 import aiohttp
@@ -5,16 +6,20 @@ from bs4 import BeautifulSoup
 
 from common.base_repo import get_current_timestamp
 from parcel.interactors.repos import parcel_repo
-from parcel.models import ParcelDeliveryPartnerEnum
+from parcel.models import ParcelDeliveryPartnerEnum, Parcel, ParcelStatusEnum
 from parcel.schema import CreateParcel
 
 does_index_exists = parcel_repo.does_index_exists
 create_index = parcel_repo.create_index
+delete_index = parcel_repo.delete_index
 cat_indices = parcel_repo.cat_indices
 
 get_parcel = parcel_repo.get_parcel
 get_latest_parcel = parcel_repo.get_latest_parcel
 
+
+def date_to_datetime(dt):
+    return datetime.datetime.combine(dt, datetime.datetime.min.time())
 
 async def get_parcel_tracking_details_from_delivery_partner(
     awn_number: str, delivery_partner: int
@@ -24,22 +29,25 @@ async def get_parcel_tracking_details_from_delivery_partner(
         bluedart_delivery_details = await get_bluedart_webpage_response(
             awn_number=awn_number
         )
-        delivery_details["status"] = bluedart_delivery_details["overview"]["Status"]
-        delivery_details["date"] = bluedart_delivery_details["overview"][
-            "Date of Delivery"
-        ]
+        if bluedart_delivery_details["overview"]["Status"] == "Shipment Delivered":
+            delivery_details["status"] = ParcelStatusEnum.DELIVERED.value
+            delivery_date_str = bluedart_delivery_details["overview"]["Date of Delivery"]
+            delivery_dt_obj = datetime.datetime.strptime(delivery_date_str,
+                                              '%d %b %Y')
+            delivery_ts = datetime.datetime.timestamp(delivery_dt_obj)
+            delivery_details["date"] = int(delivery_ts)
     return delivery_details
 
 
 async def create_parcel(create_parcel: CreateParcel):
     new_parcel_data = dict()
-    # latest_parcel = await get_latest_parcel()
-    # last_id = 0
-    # if latest_parcel["hits"]["total"]["value"] > 0:
-    #     last_id = latest_parcel["hits"]["hits"][0]["_id"]
-    #
-    # # auto generate new id
-    # new_parcel_data["id"] = last_id + 1
+    latest_parcel = await get_latest_parcel()
+    last_id = 0
+    if latest_parcel["hits"]["total"]["value"] > 0:
+        last_id = latest_parcel["hits"]["hits"][0]["_id"]
+
+    # auto generate new id
+    new_parcel_data["id"] = last_id + 1
 
     # calculate
     parcel_tracking_details = await get_parcel_tracking_details_from_delivery_partner(
@@ -48,11 +56,13 @@ async def create_parcel(create_parcel: CreateParcel):
     )
     new_parcel_data["status"] = parcel_tracking_details["status"]
     new_parcel_data["date"] = parcel_tracking_details["date"]
-    new_parcel_data["created_at"] = get_current_timestamp()
     new_parcel_data["awn_number"] = create_parcel.awn_number
-    new_parcel_data["delivery_partner"] = create_parcel.delivery_partner
-    return None
-    # return await parcel_repo.create_parcel(parcel=Parcel(**new_parcel_data))
+    new_parcel_data["created_at"] = get_current_timestamp()
+    new_parcel_data["updated_at"] = get_current_timestamp()
+
+    new_parcel_data["delivery_partner"] = create_parcel.delivery_partner.value
+    print(new_parcel_data)
+    return await parcel_repo.create_parcel(parcel=Parcel(**new_parcel_data))
 
 
 async def get_parcels_list():
