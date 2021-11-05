@@ -34,7 +34,7 @@ class HTTPClient:
     ) -> Any:
         url = self.url(path, params)
         async with AsyncClient() as ac:
-            return await ac.get(url=url, params=params, headers=headers, cookies=cookies, auth=auth)
+            return await ac.get(,
 
     async def post(
         self,

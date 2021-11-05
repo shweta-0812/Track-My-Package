@@ -3,6 +3,7 @@ from typing import Any, Optional
 from elasticsearch import AsyncElasticsearch, ElasticsearchException
 from elasticsearch._async.helpers import async_streaming_bulk
 
+from common.app_settings import app_settings
 from common.decorators import TFunc
 
 
@@ -18,7 +19,7 @@ def es_exception_handler(func: TFunc) -> TFunc:
     return inner
 
 
-async_es_client = AsyncElasticsearch("http://localhost:9200")
+async_es_client = AsyncElasticsearch(app_settings.ES_DATABASE_URL)
 
 
 @es_exception_handler
@@ -62,14 +63,15 @@ async def cat_indices_target(index: Optional[str] = None) -> Any:
     return await async_es_client.cat.indices(index=index)
 
 
-# async def bulk_ingest( index, docs):
-#     async for _ in async_streaming_bulk(
-#         client=async_es_client, index=index, actions=None
-#     ):
-#         pass
-#     return {"status": "ok"}
 
 
+async def get(index: str, id: int) -> Any:
+    try:
+        return await async_es_client.get(index=index, id=id)
+    except ElasticsearchException as e:
+        if type(e).__name__ == "NotFoundError":
+            return None
+        
 async def search(index: str, query: Any) -> Any:
     try:
         return await async_es_client.search(index=index, body=query)
@@ -84,6 +86,12 @@ async def delete(index: str, id: str ) -> Any:
         if type(e).__name__ == "NotFoundError":
             return None
 
+# async def bulk_ingest( index, docs):
+#     async for _ in async_streaming_bulk(
+#         client=async_es_client, index=index, actions=None
+#     ):
+#         pass
+#     return {"status": "ok"}
 # async def delete( index):
 #     return await async_es_client.delete_by_query(index=index, body={"query": {"match_all": {}}})
 #

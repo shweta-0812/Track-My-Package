@@ -18,7 +18,7 @@ services:
     ports:
       - 9200:9200
     networks:
-      - esnetwork
+      - ptnetwork
 
   kibana:
     image: docker.elastic.co/kibana/kibana:7.14.2
@@ -28,15 +28,26 @@ services:
     volumes:
       - kibanadata:/usr/share/kibana/parcel_tracking/data
     networks:
-      - esnetwork
+      - ptnetwork
 
+  redis:
+    image: redis
+    container_name: parcelTrackingRedis01
+    ports:
+      - 6379:6379
+    volumes:
+      - redisdata:/usr/share/redis/parcel_tracking/data
+    networks:
+      - ptnetwork
 
 volumes:
   esdata:
     driver: local
   kibanadata:
     driver: local
+  redisdata:
+    driver: local
 
 networks:
-  esnetwork:
+  ptnetwork:
     driver: bridge

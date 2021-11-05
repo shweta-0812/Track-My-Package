@@ -1,5 +1,4 @@
 
-./frontend/web/parcel-tracking/src/auth/auth_config.json
 # Ignore all files or folders that start with a dot .
 .*
 # Ignore pycache folders

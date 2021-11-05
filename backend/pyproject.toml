@@ -24,6 +24,17 @@ loguru = "^0.5.3"
 beautifulsoup4 = "^4.10.0"
 numpy = "1.21.0"
 arrow = "^1.2.1"
+pycurl = "^7.44.1"
+elasticsearch-dsl = "^7.4.0"
+pydash = "^5.1.0"
+PyJWT = "^2.3.0"
+python-multipart = "^0.0.5"
+sentry-sdk = "^1.4.3"
+python-dotenv = "^0.19.1"
+aioredis = "^2.0.0"
+google-auth = "^2.3.3"
+fastapi-sessions = "^0.3.2"
+Jinja2 = "^3.0.2"
 
 [tool.poetry.dev-dependencies]
 

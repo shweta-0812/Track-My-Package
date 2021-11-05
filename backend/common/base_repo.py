@@ -1,75 +1,47 @@
-import time
 from typing import Any, Optional
 
-from services import es_service as ESService
-
-
-def get_current_timestamp():
-    return int(time.time())
-
-
-def generate_document_index_from_klass(klass: str) -> str:
-    return f"{klass}"
+from common import base_repo_es_wrapper
 
 
 async def create(klass: str, doc_data=Any, doc_version=1):
-    index = generate_document_index_from_klass(klass=klass)
-    doc = dict(
-        **doc_data,
-        doc_version=doc_version,
+    return await base_repo_es_wrapper.create(
+        index=klass, doc_data=doc_data, doc_version=doc_version
     )
-    return await ESService.ingest(index=index, doc=doc)
 
 
 async def cat_indices(klass: Optional[str] = None):
-    index = generate_document_index_from_klass(klass=klass)
-    return await ESService.cat_indices(index=index)
+    return await base_repo_es_wrapper.cat_indices(index=klass)
 
 
 async def does_index_exists(klass: str) -> bool:
-    return await ESService.does_index_exists(index=klass)
+    return await base_repo_es_wrapper.does_index_exists(index=klass)
 
 
 async def create_index(klass: str, settings: Any, mappings: Any):
-    index = generate_document_index_from_klass(klass=klass)
-    return await ESService.create_index(
-        index=index, settings=settings, mappings=mappings
+    return await base_repo_es_wrapper.create_index(
+        index=klass, settings=settings, mappings=mappings
     )
 
-async def delete_index(klass: str) -> Any:
-    index = generate_document_index_from_klass(klass=klass)
-    return await ESService.delete_index(index=index)
 
-async def get(klass: str) -> Any:
-    index = generate_document_index_from_klass(klass=klass)
-    return await ESService.search(index=index, query={})
+async def delete_index(klass: str) -> Any:
+    return await base_repo_es_wrapper.delete_index(index=klass)
+
+
+async def get(klass: str, id: int) -> Any:
+    return await base_repo_es_wrapper.get(index=klass, id=id)
+
 
 async def get_all(klass: str) -> Any:
-    index = generate_document_index_from_klass(klass=klass)
-    return await ESService.search(index=index, query={"sort": {"date": "desc"}, "query": {"match_all": {}}},)
+    return await base_repo_es_wrapper.get_all(index=klass)
 
 
 async def get_latest(klass: str) -> Any:
-    index = generate_document_index_from_klass(klass=klass)
-    try:
-        return await ESService.search(
-            index=index,
-            query={"size": 1, "sort": {"date": "desc"}, "query": {"match_all": {}}},
-        )
-    except Exception as e:
-        print(e)
-        return None
+    return await base_repo_es_wrapper.get_latest(index=klass)
 
 
+async def update(index, id: int):
+    return await base_repo_es_wrapper.update(index=index, id=id)
 
-async def update(klass, index, doc, doc_version):
-    pass
 
-
-async def delete(klass: str, id: str) -> Any:
-    index = generate_document_index_from_klass(klass=klass)
-    return await ESService.delete(
-        index=index,
-        id=id
-    )
-
+async def delete(klass: str, id: int) -> Any:
+    return await base_repo_es_wrapper.delete(index=klass, id=id)

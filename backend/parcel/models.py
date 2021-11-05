@@ -12,6 +12,9 @@ class ParcelDeliveryPartnerEnum(IntChoice):
     AMAZON= 1
     FLIPKART= 2
     BLUEDART= 3
+    ECOM_EXPRESS= 4
+    DELHIVERY= 5
+    FEDEX= 6
 
 class ParcelStatusEnum(IntChoice):
     DELIVERED= 1

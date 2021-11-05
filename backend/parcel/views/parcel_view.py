@@ -1,50 +1,37 @@
-from fastapi import APIRouter
+from typing import List
+
+from fastapi import APIRouter, Depends
+
 from parcel.interactors import parcel_interactor
-from parcel.schema import CreateParcel
+from parcel.schemas.request import CreateParcel
+from parcel.schemas.response import Parcel
 
 router: APIRouter = APIRouter()
 
 
-@router.get("/")
+@router.get(
+    "/",
+    response_model=List[Parcel],
+)
 async def get_parcels_list():
     return await parcel_interactor.get_parcels_list()
 
 
-@router.get("/cat-indices/")
-async def cat_indices():
-    return await parcel_interactor.cat_indices()
+@router.get("/{id}/", response_model=Parcel)
+async def get_parcel(id: int):
+    return await parcel_interactor.get_parcel(id=id)
 
 
-@router.get("/create-index/")
-async def create_index():
-    return await parcel_interactor.create_index()
-
-
-@router.get("/delete-index/")
-async def delete_index():
-    return await parcel_interactor.delete_index()
-
-
-@router.get("/check-index/")
-async def check_index():
-    return await parcel_interactor.does_index_exists()
-
-
-@router.get("/latest/")
+@router.get("/latest/", response_model=Parcel)
 async def get_latest_parcel():
     return await parcel_interactor.get_latest_parcel()
 
 
-@router.post("/")
+@router.post("/", response_model=Parcel)
 async def create_parcel(create_parcel: CreateParcel):
     return await parcel_interactor.create_parcel(create_parcel=create_parcel)
 
 
-@router.patch("/{id}/")
-async def update_parcel():
-    return {}
-
-
-@router.get("/{id}/")
-async def get_parcel():
-    return {}
+@router.patch("/{id}/", response_model=Parcel)
+async def update_parcel(id: int):
+    return await parcel_interactor.get_parcel(id=id)
