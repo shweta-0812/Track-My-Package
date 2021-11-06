@@ -1,10 +1,10 @@
 from uuid import UUID
 
-from fastapi import APIRouter, Request, Depends
+from fastapi import APIRouter, Depends
 from starlette.responses import JSONResponse
 
-from common.user_session_auth_dep import get_current_active_user
 from common.schema import Success
+from common.user_session_auth_dep import get_current_active_user
 from services import auth_session_service
 from services.auth_session_service import cookie
 from user.interactors import user_interactor
