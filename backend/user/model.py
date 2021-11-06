@@ -1,14 +1,9 @@
-from common.int_choice import IntChoice
-from parcel.models import PTBaseModel
+from common.base_model import PTBaseModel
 
-
-class UserStatusEnum(IntChoice):
-    ACTIVE= 1
-    IN_ACTIVE= 2
+USER_MODEL = "user"
 
 
 class User(PTBaseModel):
     id: int
     email: str
     first_name: str
-    status: UserStatusEnum

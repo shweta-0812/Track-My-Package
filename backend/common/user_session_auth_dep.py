@@ -20,7 +20,7 @@ async def authenticate_session(request: Request) -> int:
 
 
 async def get_current_user(user_email: str = Depends(authenticate_session)) -> Any:
-    user = await user_interactor.get_user(email=user_email)
+    user = await user_interactor.get_user_by_email(email=user_email)
     if not user:
         raise HTTPException(status_code=HTTP_404_NOT_FOUND, detail=UserManagerErrorMessages.USER_NOT_FOUND)
     return user

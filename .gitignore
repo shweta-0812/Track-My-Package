@@ -5,3 +5,8 @@
 __pycache__/
 #  Ignore all files that start with a dot . but .gitignore
 !/.gitignore
+# Ignore log files
+backend/file_*.log
+
+# Ignore backend pycach
+backend/*/__pycache__

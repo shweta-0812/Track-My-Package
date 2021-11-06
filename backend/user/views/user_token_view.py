@@ -11,6 +11,7 @@ from fastapi.responses import JSONResponse, RedirectResponse
 from common.app_settings import app_settings
 from services import auth_session_service
 from services.auth_session_service import SessionData, cookie, backend, verifier
+from user.interactors import user_interactor
 
 router: APIRouter = APIRouter()
 
@@ -42,27 +43,36 @@ from uuid import UUID, uuid4
 #     return "deleted session"
 
 
-
 @router.post("/google-login-test")
 async def test_google_login(request: Request):
     req = await request.json()
     try:
         # Specify the CLIENT_ID of the app that accesses the backend:
         id_info = id_token.verify_oauth2_token(
-            req["id_token"],
-            requests.Request(),
-            app_settings.GOOGLE_API_CLIENT_ID,
+            req["id_token"], requests.Request(), app_settings.GOOGLE_API_CLIENT_ID,
         )
 
         # ID token is valid. Get the user's Google Account ID from the decoded token. and create user if not exists
         user_email = id_info["email"]
+
+        # TODO: create user if not exists else get
+        await user_interactor.count_users(email=user_email)
+        await user_interactor.get_user_by_email(email=user_email)
+        await user_interactor.create_user(
+            email=user_email,
+            first_name=id_info["first_name"],
+            last_name=id_info["last_name"],
+        )
+
         # create a session and redirect with the cookie
         response: Union[RedirectResponse, JSONResponse]
         response = RedirectResponse(url="/")
         # #starlette response by default have code 307, which preserves the method during the redirection, hence the post request. I solved this by adding response.status_code = 302 before returning the response.
         response.status_code = 302
 
-        session_key = await auth_session_service.create_session_key_from_user_email(user_email=user_email)
+        session_key = await auth_session_service.create_session_key_from_user_email(
+            user_email=user_email
+        )
         cookie.attach_to_response(response, session_key)
 
         # response.set_cookie(
