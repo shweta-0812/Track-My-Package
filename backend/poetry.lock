@@ -463,6 +463,14 @@ optional = false
 python-versions = "*"
 
 [[package]]
+name = "mockito"
+version = "1.2.2"
+description = "Spying framework"
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
 name = "multidict"
 version = "5.2.0"
 description = "multidict implementation"
@@ -893,7 +901,7 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "3ce0ac2b5ca76843e45568bf0b9d6e16f3c66abff3e89cbd04711365a0e98ae3"
+content-hash = "37fd070be76272820554250883855c4422c38899153aa5c79d503b038afe8c0d"
 
 [metadata.files]
 aftership = [
@@ -1140,6 +1148,9 @@ markupsafe = [
 mccabe = [
     {file = "mccabe-0.6.1-py2.py3-none-any.whl", hash = "sha256:ab8a6258860da4b6677da4bd2fe5dc2c659cff31b3ee4f7f5d64e79735b80d42"},
     {file = "mccabe-0.6.1.tar.gz", hash = "sha256:dd8d182285a0fe56bace7f45b5e7d1a6ebcbf524e8f3bd87eb0f125271b8831f"},
+]
+mockito = [
+    {file = "mockito-1.2.2.tar.gz", hash = "sha256:d6b3aca6cdb92bbd47e19ebdb1a0b84ef23ab874eae5c6d505323c8657257c06"},
 ]
 multidict = [
     {file = "multidict-5.2.0-cp310-cp310-macosx_10_9_universal2.whl", hash = "sha256:3822c5894c72e3b35aae9909bef66ec83e44522faf767c0ad39e0e2de11d3b55"},

@@ -36,9 +36,45 @@ google-auth = "^2.3.3"
 fastapi-sessions = "^0.3.2"
 Jinja2 = "^3.0.2"
 pytest = "^6.2.5"
+mockito = "^1.2.2"
 
 [tool.poetry.dev-dependencies]
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+
+[tool.pytest.ini_options]
+minversion = "2.0"
+addopts = "-rfEX -p pytester "
+python_files = ["test_*.py"]
+python_classes = ["Test", "Test*", "*Test", "*Tests"]
+python_functions = ["test*", "test_*","*_test"]
+testpaths = ["./user/repos/tests/"]
+norecursedirs = [".svn", "_build", "tmp*", ".*", "node_modules", "build", "client", "static"]
+#xfail_strict = true
+filterwarnings = [
+    "error",
+    "default:Using or importing the ABCs:DeprecationWarning:unittest2.*",
+    "default:Using or importing the ABCs:DeprecationWarning:pyparsing.*",
+    "default:the imp module is deprecated in favour of importlib:DeprecationWarning:nose.*",
+    "ignore:The distutils package is deprecated:DeprecationWarning",
+    "ignore:.*U.*mode is deprecated:DeprecationWarning:(?!(pytest|_pytest))",
+    "ignore:.*type argument to addoption.*:DeprecationWarning",
+    "ignore:.*inspect.getargspec.*deprecated, use inspect.signature.*:DeprecationWarning",
+    "ignore::pytest.PytestExperimentalApiWarning",
+    "default:invalid escape sequence:DeprecationWarning",
+    "ignore::_pytest.warning_types.PytestUnknownMarkWarning",
+    "ignore:_SixMetaPathImporter\\.exec_module\\(\\) not found; falling back to load_module\\(\\):ImportWarning",
+    "ignore:_SixMetaPathImporter\\.find_spec\\(\\) not found; falling back to find_module\\(\\):ImportWarning",
+    "ignore:VendorImporter\\.find_spec\\(\\) not found; falling back to find_module\\(\\):ImportWarning",
+    "ignore:isSet\\(\\) is deprecated, use is_set\\(\\) instead:DeprecationWarning",
+]
+pytester_example_dir = "testing/example_scripts"
+markers = [
+    "unit",
+    "integration",
+    "api",
+]
+#path=tests/

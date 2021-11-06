@@ -1,6 +1,9 @@
+from common.test_util import BaseAsyncIntegrationTestCase
+
+
 class UserRepoTest(BaseAsyncIntegrationTestCase):
     async def test_user_create(self):
-        pass
+        assert 1==1
 
     async def test_user_update(self):
         pass
