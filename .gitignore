@@ -15,3 +15,4 @@ backend/*/__pycache__
 
 *node_modules*
 *yarn-error.log
+*.env
