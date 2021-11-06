@@ -76,15 +76,16 @@ async def get_latest(index: str) -> Any:
     )
     es_parsed_data = ESDataParser(resp_data)
     data = es_parsed_data.hits_data_details
-    result = []
+    if data:
+        result = []
+        def cb(elem):
+            original_data = elem["_source"]
+            original_data["id"] = elem["_id"]
+            result.append(original_data)
 
-    def cb(elem):
-        original_data = elem["_source"]
-        original_data["id"] = elem["_id"]
-        result.append(original_data)
-
-    pydash.for_each(data, cb)
-    return result
+        pydash.for_each(data, cb)
+        return result
+    return None
 
 
 async def update(index: str, id: str, **update_kwargs) -> Any:

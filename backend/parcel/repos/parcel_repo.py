@@ -1,4 +1,5 @@
 from common import base_repo
+from common.app_settings import app_settings
 from parcel.models import Parcel, PARCEL_MODEL
 
 
@@ -13,7 +14,7 @@ async def does_index_exists() -> bool:
 async def create_index():
     return await base_repo.create_index(
         klass=PARCEL_MODEL,
-        settings={"number_of_shards": 3, "number_of_replicas": 2},
+        settings=app_settings.DEFAULT_ES_INDEX_SETTINGS,
         mappings={
             "properties": {
                 "id": {"type": "integer"},

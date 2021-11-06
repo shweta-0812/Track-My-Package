@@ -70,7 +70,7 @@ async def test_google_login(request: Request):
         # #starlette response by default have code 307, which preserves the method during the redirection, hence the post request. I solved this by adding response.status_code = 302 before returning the response.
         response.status_code = 302
 
-        session_key = await auth_session_service.create_session_key_from_user_email(
+        session_key = await auth_session_service.create_session_for_user(
             user_email=user_email
         )
         cookie.attach_to_response(response, session_key)

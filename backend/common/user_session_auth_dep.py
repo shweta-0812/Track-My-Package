@@ -29,8 +29,6 @@ async def get_current_user(user_email: str = Depends(authenticate_session)) -> A
 async def get_current_active_user(
     request: Request, current_user = Depends(get_current_user),
 ) -> Any:
-    if not current_user.is_email_validated:
-        raise HTTPException(status_code=HTTP_401_UNAUTHORIZED, detail=UserManagerErrorMessages.EMAIL_NOT_VERIFIED)
     if not current_user.is_active:
         raise HTTPException(status_code=HTTP_401_UNAUTHORIZED, detail=UserManagerErrorMessages.INACTIVE_USER)
     if hasattr(request, "state"):

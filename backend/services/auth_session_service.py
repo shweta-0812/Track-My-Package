@@ -2,11 +2,12 @@
 from typing import Any, Dict
 from uuid import UUID, uuid4
 
-from fastapi import HTTPException, Request
+from fastapi import HTTPException, Request, Depends
 from fastapi_sessions.backends.implementations import InMemoryBackend
 from fastapi_sessions.frontends.implementations import CookieParameters, SessionCookie
 from fastapi_sessions.session_verifier import SessionVerifier
 from pydantic import BaseModel
+from starlette.responses import JSONResponse
 
 from common.app_settings import app_settings
 
@@ -69,11 +70,18 @@ verifier = BasicVerifier(
 )
 
 
-async def create_session_key_from_user_email(user_email: str):
+async def create_session_for_user(user_email: str):
     session = uuid4()
     data = SessionData(username=user_email)
     await backend.create(session, data)
     return session
+
+
+async def delete_session_for_user(session_id: UUID):
+    response = JSONResponse(content={"success": True, "msg": "You are now logged out!"})
+    await backend.delete(session_id)
+    cookie.delete_from_response(response)
+    return response
 
 
 async def get_user_email_from_request(request: Request):

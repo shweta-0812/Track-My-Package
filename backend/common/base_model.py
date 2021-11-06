@@ -3,6 +3,7 @@ from typing import Optional
 from pydantic import BaseModel
 
 from common.int_choice import IntChoice
+from common.utils import get_current_timestamp
 
 
 class PTBaseModelStatusEnum(IntChoice):
@@ -11,6 +12,6 @@ class PTBaseModelStatusEnum(IntChoice):
 
 
 class PTBaseModel(BaseModel):
-    created_at: int
-    updated_at: Optional[int]
-    status: PTBaseModelStatusEnum
+    created_at: int = get_current_timestamp()
+    updated_at: Optional[int] = get_current_timestamp()
+    status: PTBaseModelStatusEnum = PTBaseModelStatusEnum.ACTIVE

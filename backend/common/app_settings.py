@@ -1,6 +1,6 @@
 import os
 import time
-from typing import Optional, List
+from typing import Optional, List, Dict, Any
 
 from pydantic import BaseSettings, AnyHttpUrl
 
@@ -36,13 +36,14 @@ class Settings(BaseSettings):
     SESSION_SECRET_KEY: str
     GOOGLE_API_CLIENT_ID: str
     LOGGER_SINK: str = f"file_{time.time()}.log"
-    LOGGER_ROTATION_MEM_LIMIT: str = "500 MB"
-    LOGGER_RETENTION_DAYS: str = "10 days"
-    LOGGER_LOG_LEVEL: str = "DEBUG"
+    LOGGER_ROTATION_MEM_LIMIT: str
+    LOGGER_RETENTION_DAYS: str
+    LOGGER_LOG_LEVEL: str
     LOGGER_COMPRESSION: str = "zip"
     LOGGER_ENQUEUE: bool = True
     LOGGER_BACKTRACE: bool = False
     LOGGER_SERIALIZE: bool = True
+    DEFAULT_ES_INDEX_SETTINGS: Dict[Any, Any] = {"number_of_shards": 3, "number_of_replicas": 2}
 
     BASE_DIR = os.path.dirname(
         os.path.dirname(os.path.dirname(os.path.abspath(__file__)))

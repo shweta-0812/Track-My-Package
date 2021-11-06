@@ -3,7 +3,7 @@ from pydantic import BaseModel
 from parcel.models import ParcelStatusEnum, ParcelDeliveryPartnerEnum
 
 
-class Parcel(BaseModel):
+class ParcelInDB(BaseModel):
     id: int
     awn_number: str
     delivery_partner: ParcelDeliveryPartnerEnum
