@@ -2,6 +2,7 @@
 # Ignore all files or folders that start with pyc
 *.pyc
 .idea
+
 # Ignore pycache folders
 __pycache__/
 #  Ignore all files that start with a dot . but .gitignore
@@ -11,3 +12,6 @@ backend/file_*.log
 
 # Ignore backend pycach
 backend/*/__pycache__
+
+*node_modules*
+*yarn-error.log
