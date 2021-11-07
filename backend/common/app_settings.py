@@ -45,6 +45,8 @@ class Settings(BaseSettings):
     LOGGER_SERIALIZE: bool = True
     DEFAULT_ES_INDEX_SETTINGS: Dict[Any, Any] = {"number_of_shards": 3, "number_of_replicas": 2}
 
+    ELASTICSEARCH_PORT: int = 9200
+    ELASTICSEARCH_HOST: str = "localhost"
     BASE_DIR = os.path.dirname(
         os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     )

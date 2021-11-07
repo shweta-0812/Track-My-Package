@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 
-from parcel.models import ParcelDeliveryPartnerEnum
+from parcel.model import ParcelDeliveryPartnerEnum
 
 
 class CreateParcel(BaseModel):

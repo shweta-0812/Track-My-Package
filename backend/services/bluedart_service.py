@@ -6,7 +6,7 @@ from bs4 import BeautifulSoup
 
 # https://www.bluedart.com/web/guest/trackdartresultthirdparty?trackFor=0&trackNo= 62321351396
 # awn num 62321351396
-from parcel.models import ParcelStatusEnum
+from parcel.model import ParcelStatusEnum
 
 
 async def get_bluedart_parcel_tracking_details(awn_number: str) -> Dict[str, Any]:

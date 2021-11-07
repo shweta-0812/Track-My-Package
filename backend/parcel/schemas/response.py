@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 
-from parcel.models import ParcelStatusEnum, ParcelDeliveryPartnerEnum
+from parcel.model import ParcelStatusEnum, ParcelDeliveryPartnerEnum
 
 
 class ParcelInDB(BaseModel):

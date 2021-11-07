@@ -20,6 +20,28 @@ services:
     networks:
       - ptnetwork
 
+
+#  backend:
+#    build:
+#      context: ./
+#      dockerfile: backendservice.Dockerfile
+#    image: backend_service
+#    container_name: parcelTrackingBE01
+#    environment:
+#      - node.name=be01
+#      - cluster.name=be-docker-cluster
+#      - cluster.initial_master_nodes=be01
+#      - bootstrap.memory_lock=true
+#      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+#    ulimits:
+#      memlock:
+#        soft: -1
+#        hard: -1
+#    ports:
+#      - 8000:8000
+#    networks:
+#      - ptnetwork
+
   kibana:
     image: docker.elastic.co/kibana/kibana:7.14.2
     container_name: parcelTrackingKibana01

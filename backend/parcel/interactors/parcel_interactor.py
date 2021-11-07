@@ -1,7 +1,7 @@
 from typing import Any
 
 from common.utils import get_current_timestamp
-from parcel.models import ParcelDeliveryPartnerEnum, Parcel
+from parcel.model import ParcelDeliveryPartnerEnum, Parcel
 from parcel.repos import parcel_repo
 from parcel.schemas.request import CreateParcel
 from services.bluedart_service import get_bluedart_parcel_tracking_details

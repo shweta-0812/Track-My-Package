@@ -1,6 +1,6 @@
 from common import base_repo
 from common.app_settings import app_settings
-from user.model import USER_MODEL, User
+from user.model import USER_MODEL, User, USER_ES_INDEX_DOC_MAPPINGS
 
 
 async def create_user(user: User):
@@ -15,18 +15,7 @@ async def create_index():
     return await base_repo.create_index(
         klass=USER_MODEL,
         settings=app_settings.DEFAULT_ES_INDEX_SETTINGS,
-        mappings={
-            "properties": {
-                "id": {"type": "integer"},
-                "email": {"type": "text"},
-                "first_name": {"type": "text"},
-                "last_name": {"type": "text"},
-                "status": {"type": "integer"},
-                "date": {"type": "integer"},
-                "created_at": {"type": "integer"},
-                "updated_at": {"type": "integer"},
-            }
-        },
+        mappings=USER_ES_INDEX_DOC_MAPPINGS,
     )
 
 

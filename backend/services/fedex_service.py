@@ -4,7 +4,7 @@ from typing import Dict, Any
 import aiohttp
 
 # awn num: 284932411496
-from parcel.models import ParcelStatusEnum
+from parcel.model import ParcelStatusEnum
 
 
 async def get_fedex_parcel_details(awn_number: str) ->Dict[str, Any]:

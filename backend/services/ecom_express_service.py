@@ -5,7 +5,7 @@ import aiohttp
 from bs4 import BeautifulSoup
 
 # awn_number:  2792380736
-from parcel.models import ParcelStatusEnum
+from parcel.model import ParcelStatusEnum
 
 
 async def get_ecom_express_parcel_tracking_details(awn_number: str) -> Dict[str, Any]:

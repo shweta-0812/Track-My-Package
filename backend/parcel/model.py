@@ -1,7 +1,19 @@
 from common.base_model import PTBaseModel
 from common.int_choice import IntChoice
 
-PARCEL_MODEL="parcel"
+PARCEL_MODEL = "parcel"
+
+PARCEL_ES_INDEX_DOC_MAPPINGS = {
+    "properties": {
+        "id": {"type": "integer"},
+        "awn_number": {"type": "text"},
+        "delivery_partner": {"type": "integer"},
+        "status": {"type": "integer"},
+        "date": {"type": "integer"},
+        "created_at": {"type": "integer"},
+        "updated_at": {"type": "integer"},
+    }
+}
 
 
 class ParcelDeliveryPartnerEnum(IntChoice):

@@ -6,39 +6,35 @@ from common.es_data_parser import ESDataParser
 from services import es_service as ESService
 
 
-def generate_document_index_from_index(index: str) -> str:
-    return f"{index}"
+def generate_document_index_from_index(klass: str) -> str:
+    return f"{klass}"
 
 
-async def create(index: str, doc_data=Any, doc_version=1):
-    index = generate_document_index_from_index(index=index)
+async def create(klass: str, doc_data=Any, doc_version=1):
     doc = dict(**doc_data, doc_version=doc_version,)
-    return await ESService.ingest_doc(index=index, doc=doc)
+    return await ESService.ingest_doc(index=klass, doc=doc)
 
 
-async def cat_indices(index: Optional[str] = None):
-    index = generate_document_index_from_index(index=index)
-    return await ESService.cat_indices(index=index)
+async def cat_indices(klass: Optional[str] = None):
+    return await ESService.cat_indices(index=klass)
 
 
-async def does_index_exists(index: str) -> bool:
-    return await ESService.does_index_exists(index=index)
+async def does_index_exists(klass: str) -> bool:
+    return await ESService.does_index_exists(index=klass)
 
 
-async def create_index(index: str, settings: Any, mappings: Any):
-    index = generate_document_index_from_index(index=index)
+async def create_index(klass: str, settings: Any, mappings: Any):
     return await ESService.create_index(
-        index=index, settings=settings, mappings=mappings
+        index=klass, settings=settings, mappings=mappings
     )
 
 
-async def delete_index(index: str) -> Any:
-    index = generate_document_index_from_index(index=index)
-    return await ESService.delete_index(index=index)
+async def delete_index(klass: str) -> Any:
+    return await ESService.delete_index(index=klass)
 
 
-async def get(index: str, id: str) -> Any:
-    resp_data = await ESService.get_doc(index=index, id=id)
+async def get(klass: str, id: str) -> Any:
+    resp_data = await ESService.get_doc(index=klass, id=id)
     es_parsed_data = ESDataParser(resp_data)
     data = es_parsed_data.hits_data_details
     result = []
@@ -52,9 +48,9 @@ async def get(index: str, id: str) -> Any:
     return result
 
 
-async def get_all(index: str) -> Any:
+async def get_all(klass: str) -> Any:
     resp_data = await ESService.search_docs(
-        index=index, body={"sort": {"date": "desc"}, "query": {"match_all": {}}},
+        index=klass, body={"sort": {"date": "desc"}, "query": {"match_all": {}}},
     )
     es_parsed_data = ESDataParser(resp_data)
     data = es_parsed_data.hits_data_details
@@ -69,9 +65,9 @@ async def get_all(index: str) -> Any:
     return result
 
 
-async def get_latest(index: str) -> Any:
+async def get_latest(klass: str) -> Any:
     resp_data = await ESService.search_docs(
-        index=index,
+        index=klass,
         body={"size": 1, "sort": {"date": "desc"}, "query": {"match_all": {}}},
     )
     es_parsed_data = ESDataParser(resp_data)
@@ -88,10 +84,10 @@ async def get_latest(index: str) -> Any:
     return None
 
 
-async def update(index: str, id: str, **update_kwargs) -> Any:
+async def update(klass: str, id: str, **update_kwargs) -> Any:
     print(update_kwargs)
     body={"query": {}}
-    resp_data = await ESService.update_doc(index=index, id=id, body=body)
+    resp_data = await ESService.update_doc(index=klass, id=id, body=body)
     return resp_data
 
 
@@ -108,27 +104,27 @@ def generate_filters_query(filters: Dict[str, Any] = None) -> Dict[str, Any]:
     return query
 
 
-async def _filter(index: str, filters: Dict[str, Any] = None) -> Any:
+async def _filter(klass: str, filters: Dict[str, Any] = None) -> Any:
     if filters is None:
         return None
     body = {"query": generate_filters_query(filters=filters)}
-    resp_data = await ESService.search_docs(index=index, body=body)
+    resp_data = await ESService.search_docs(index=klass, body=body)
     return resp_data
 
 
-async def count(index: str, filters: Dict[str, Any] = None) -> Any:
+async def count(klass: str, filters: Dict[str, Any] = None) -> Any:
     body = {"size": 0, "track_total_hits": True}
     if filters is not None:
         body["query"] = generate_filters_query(filters=filters)
-    resp_data = await ESService.search_docs(index=index, body=body)
+    resp_data = await ESService.search_docs(index=klass, body=body)
     return resp_data
 
 
-async def count_all(index: str) -> Any:
-    resp_data = await ESService.count_all_docs(index=index)
+async def count_all(klass: str) -> Any:
+    resp_data = await ESService.count_all_docs(index=klass)
     return resp_data
 
 
-async def delete(index: str, id: str) -> Any:
-    index = generate_document_index_from_index(index=index)
-    return await ESService.delete_doc(index=index, id=id)
+async def delete(klass: str, id: str) -> Any:
+    index = generate_document_index_from_index(index=klass)
+    return await ESService.delete_doc(index=klass, id=id)
