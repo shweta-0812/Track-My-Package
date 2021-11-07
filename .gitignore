@@ -3,6 +3,7 @@
 *.pyc
 .idea
 
+backend/*.pytest_cache*
 # Ignore pycache folders
 backend/*__pycache__*
 #  Ignore all files that start with a dot . but .gitignore
