@@ -39,6 +39,7 @@ pytest = "^6.2.5"
 mockito = "^1.2.2"
 pytest-asyncio = "^0.16.0"
 pytest-elasticsearch = "^2.1.0"
+aiofiles = "^0.7.0"
 
 [tool.poetry.dev-dependencies]
 

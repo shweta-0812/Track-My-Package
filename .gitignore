@@ -4,7 +4,7 @@
 .idea
 
 # Ignore pycache folders
-__pycache__/
+backend/*__pycache__*
 #  Ignore all files that start with a dot . but .gitignore
 !/.gitignore
 # Ignore log files

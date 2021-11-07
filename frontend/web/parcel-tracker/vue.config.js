@@ -8,7 +8,7 @@ module.exports = {
     process.env.NODE_ENV === 'production'
       ? process.env.VUE_APP_CDN_URL
       : '/static/',
-  outputDir: '../../static',
+  outputDir: '../../../static',
   devServer: {
     sockPort: 8080,
     writeToDisk: true,
@@ -33,16 +33,16 @@ module.exports = {
       },
     },
   },
-  css: {
-    loaderOptions: {
-      postcss: {
-        config: {
-          path: './postcss.config.js',
-        },
-      },
-      scss: {
-        implementation: require('node-sass'),
-      },
-    },
-  },
+  // css: {
+  //   loaderOptions: {
+  //     // postcss: {
+  //     //   config: {
+  //     //     path: './postcss.config.js',
+  //     //   },
+  //     // },
+  //     scss: {
+  //       implementation: require('node-sass'),
+  //     },
+  //   },
+  // },
 };

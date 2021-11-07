@@ -10,6 +10,14 @@ python-versions = ">=3.6,<4.0"
 requests = "*"
 
 [[package]]
+name = "aiofiles"
+version = "0.7.0"
+description = "File support for asyncio."
+category = "main"
+optional = false
+python-versions = ">=3.6,<4.0"
+
+[[package]]
 name = "aiohttp"
 version = "3.7.4.post0"
 description = "Async http client/server framework (asyncio)"
@@ -968,12 +976,16 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "0d24b6011572decd4ffcf9aae747a095c668043a75430bc2be6560e538c7f5e7"
+content-hash = "5dc31fcf6b9519b4c3f1a82d1de419f6d263ad34d48572de478e54ac2e023326"
 
 [metadata.files]
 aftership = [
     {file = "aftership-1.3.0-py3-none-any.whl", hash = "sha256:e9ceb20ac966a44167925efadbae7bbcb026172818ed827bc87edf5147ecb694"},
     {file = "aftership-1.3.0.tar.gz", hash = "sha256:0e141ab6a38b55d40db2409118147a104eb66b6ba5ebd658e6dd676ca34312df"},
+]
+aiofiles = [
+    {file = "aiofiles-0.7.0-py3-none-any.whl", hash = "sha256:c67a6823b5f23fcab0a2595a289cec7d8c863ffcb4322fb8cd6b90400aedfdbc"},
+    {file = "aiofiles-0.7.0.tar.gz", hash = "sha256:a1c4fc9b2ff81568c83e21392a82f344ea9d23da906e4f6a52662764545e19d4"},
 ]
 aiohttp = [
     {file = "aiohttp-3.7.4.post0-cp36-cp36m-macosx_10_14_x86_64.whl", hash = "sha256:3cf75f7cdc2397ed4442594b935a11ed5569961333d49b7539ea741be2cc79d5"},
