@@ -1,9 +1,12 @@
 from common import base_repo
 from common.app_settings import app_settings
-from user.model import USER_MODEL, User, USER_ES_INDEX_DOC_MAPPINGS
+from user.model import USER_MODEL, UserModel, USER_ES_INDEX_DOC_MAPPINGS
+
+async def get_user_by_email(email: str):
+    return await base_repo.get_by_field(klass=USER_MODEL, field_name="email", field_value=email)
 
 
-async def create_user(user: User):
+async def create_user(user: UserModel):
     return await base_repo.create(klass=USER_MODEL, doc_data=user.dict())
 
 

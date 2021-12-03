@@ -1,5 +1,7 @@
 from typing import Any, Optional, Dict
 
+import pydash
+
 from common import base_repo_es_wrapper
 from common.base_model import PTBaseModelStatusEnum
 
@@ -28,15 +30,22 @@ async def delete_index(klass: str) -> Any:
 
 
 async def get(klass: str, id: str) -> Any:
-    return await base_repo_es_wrapper.get(klass=klass, id=id)
+    result =  await base_repo_es_wrapper.get(klass=klass, id=id)
+    if result:
+        return pydash.head(result)
+
+async def get_by_field(klass: str, field_name: str, field_value: str) -> Any:
+    result = await base_repo_es_wrapper.get_by_field(klass=klass, field_value=field_value, field_name=field_name)
+    if result:
+        return pydash.head(result)
 
 
 async def get_all(klass: str) -> Any:
     return await base_repo_es_wrapper.get_all(klass=klass)
 
 
-async def get_latest(klass: str) -> Any:
-    return await base_repo_es_wrapper.get_latest(klass=klass)
+async def get_lastest_doc(klass: str) -> Any:
+    return await base_repo_es_wrapper.get_lastest_doc(klass=klass)
 
 
 async def delete(klass: str, id: str, soft_delete: bool = True) -> Any:

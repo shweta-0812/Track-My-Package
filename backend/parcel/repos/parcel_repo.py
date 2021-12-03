@@ -1,9 +1,9 @@
 from common import base_repo
 from common.app_settings import app_settings
-from parcel.model import Parcel, PARCEL_MODEL, PARCEL_ES_INDEX_DOC_MAPPINGS
+from parcel.model import ParcelModelClass, PARCEL_MODEL, PARCEL_ES_INDEX_DOC_MAPPINGS
 
 
-async def create_parcel(parcel: Parcel):
+async def create_parcel(parcel: ParcelModelClass):
     return await base_repo.create(klass=PARCEL_MODEL, doc_data=parcel.dict())
 
 
@@ -35,5 +35,5 @@ async def get_parcels():
     return await base_repo.get_all(klass=PARCEL_MODEL)
 
 
-async def get_latest_parcel():
-    return await base_repo.get_latest(klass=PARCEL_MODEL)
+async def get_latest_parcel(user_id: int):
+    return await base_repo.get_lastest_doc(klass=PARCEL_MODEL, filter = {"user_id": user_id})

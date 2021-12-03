@@ -4,5 +4,5 @@ from parcel.model import ParcelDeliveryPartnerEnum
 
 
 class CreateParcel(BaseModel):
-    awn_number: str
+    awn: str
     delivery_partner: ParcelDeliveryPartnerEnum

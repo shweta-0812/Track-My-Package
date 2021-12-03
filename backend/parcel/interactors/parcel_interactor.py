@@ -1,13 +1,13 @@
+import json
 from typing import Any
 
-from common.utils import get_current_timestamp
-from parcel.model import ParcelDeliveryPartnerEnum, Parcel
+from delivery_client.bluedart_client import Bluedart
+from delivery_client.ecom_express_client import EcomExpress
+from delivery_client.fedex_client import Fedex
+from parcel.model import ParcelDeliveryPartnerEnum
+from parcel.parcel import Parcel
 from parcel.repos import parcel_repo
 from parcel.schemas.request import CreateParcel
-from services.bluedart_service import get_bluedart_parcel_tracking_details
-from services.ecom_express_service import \
-    get_ecom_express_parcel_tracking_details
-from services.fedex_service import get_fedex_parcel_details
 
 does_index_exists = parcel_repo.does_index_exists
 create_index = parcel_repo.create_index
@@ -18,46 +18,38 @@ get_parcel = parcel_repo.get_parcel
 get_latest_parcel = parcel_repo.get_latest_parcel
 
 
-async def get_parcel_tracking_details_from_delivery_partner(
-    awn_number: str, delivery_partner: int
+async def get_parcel_tracking_detail_for_delivery_partner(
+    awn: str, delivery_partner: int
 ) -> Any:
-    delivery_details = dict()
+    parcel_tracker_obj = None
     if delivery_partner == ParcelDeliveryPartnerEnum.BLUEDART.value:
-        delivery_details = await get_bluedart_parcel_tracking_details(
-            awn_number=awn_number
-        )
+        parcel_tracker_obj = Bluedart(awn=awn)
     if delivery_partner == ParcelDeliveryPartnerEnum.ECOM_EXPRESS.value:
-        delivery_details = await get_ecom_express_parcel_tracking_details(
-            awn_number=awn_number
-        )
+        parcel_tracker_obj = EcomExpress(awn=awn)
     if delivery_partner == ParcelDeliveryPartnerEnum.FEDEX.value:
-        delivery_details = await get_fedex_parcel_details(awn_number=awn_number)
-    return delivery_details
+        parcel_tracker_obj = Fedex(awn=awn)
+    if parcel_tracker_obj is not None:
+        await parcel_tracker_obj.fetch_tracking_details()
+    return parcel_tracker_obj
 
 
-async def create_parcel(create_parcel: CreateParcel):
+async def create_parcel(create_parcel: CreateParcel, user):
+    parcel_tracking_details = await get_parcel_tracking_detail_for_delivery_partner(
+        awn=create_parcel.awn,
+        delivery_partner=create_parcel.delivery_partner,
+    )
+    user_parcel = Parcel(awn=parcel_tracking_details._awn, tracking_status=parcel_tracking_details._tracking_status, tracking_ts=parcel_tracking_details._tracking_ts,  user=user)
     new_parcel_data = dict()
-    latest_parcel = await get_latest_parcel()
+
+    latest_parcel = await user_parcel.get_latest_parcel()
     last_id = 0
     if latest_parcel["hits"]["total"]["value"] > 0:
         last_id = latest_parcel["hits"]["hits"][0]["_id"]
 
     # auto generate new id
     new_parcel_data["id"] = int(last_id) + 1
-
-    # calculate
-    parcel_tracking_details = await get_parcel_tracking_details_from_delivery_partner(
-        awn_number=create_parcel.awn_number,
-        delivery_partner=create_parcel.delivery_partner,
-    )
-    new_parcel_data["status"] = parcel_tracking_details["status"]
-    new_parcel_data["date"] = parcel_tracking_details["date"]
-    new_parcel_data["awn_number"] = create_parcel.awn_number
-    new_parcel_data["created_at"] = get_current_timestamp()
-    new_parcel_data["updated_at"] = get_current_timestamp()
-
-    new_parcel_data["delivery_partner"] = create_parcel.delivery_partner.value
-    return await parcel_repo.create_parcel(parcel=Parcel(**new_parcel_data))
+    return None
+    # return await parcel_repo.create_parcel(parcel=ParcelModelClass(**new_parcel_data))
 
 
 async def get_parcels_list():

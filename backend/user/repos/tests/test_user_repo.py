@@ -12,15 +12,3 @@ elasticsearch_noproc = factories.elasticsearch_noproc(
 
 elasticsearch = factories.elasticsearch("elasticsearch_noproc")
 
-
-class TestUserRepo:
-    @pytest.fixture(autouse=True)
-    def user_index(self, elasticsearch):
-        index = USER_MODEL
-        elasticsearch.indices.create(index=index)
-        elasticsearch.indices.put_mapping(
-            include_type_name=True,
-            body=USER_ES_INDEX_DOC_MAPPINGS,
-            doc_type="_doc",
-            index=index,
-        )

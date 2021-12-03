@@ -6,12 +6,13 @@ PARCEL_MODEL = "parcel"
 PARCEL_ES_INDEX_DOC_MAPPINGS = {
     "properties": {
         "id": {"type": "integer"},
-        "awn_number": {"type": "text"},
+        "awn": {"type": "text"},
+        "user_id": {"type": "integer"},
         "delivery_partner": {"type": "integer"},
         "status": {"type": "integer"},
         "date": {"type": "integer"},
         "created_at": {"type": "integer"},
-        "updated_at": {"type": "integer"},
+        "updated_at": {"type": "integer"}
     }
 }
 
@@ -30,9 +31,9 @@ class ParcelStatusEnum(IntChoice):
     IN_TRANSIT = 2
 
 
-class Parcel(PTBaseModel):
+class ParcelModelClass(PTBaseModel):
     id: int
-    awn_number: str
+    awn: str
     delivery_partner: ParcelDeliveryPartnerEnum
     status: ParcelStatusEnum
     date: int

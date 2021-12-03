@@ -1,6 +1,6 @@
 from typing import Any
 
-from user.model import User
+from user.model import UserModel
 from user.repos import user_repo
 from user.schemas.request import CreateUser
 
@@ -8,7 +8,7 @@ get_latest_user = user_repo.get_latest_user
 
 
 async def get_user_by_email(email: str):
-    return await user_repo._filter(email=email)
+    return await user_repo.get_user_by_email(email=email)
 
 
 async def get_user(id: str):
@@ -34,7 +34,7 @@ async def create_user(create_user: CreateUser):
     new_user_data["first_name"] = create_user.first_name
     new_user_data["last_name"] = create_user.last_name
 
-    return await user_repo.create_user(user=User(**new_user_data))
+    return await user_repo.create_user(user=UserModel(**new_user_data))
 
 
 async def update_user(

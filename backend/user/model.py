@@ -15,8 +15,7 @@ USER_ES_INDEX_DOC_MAPPINGS = {
     }
 }
 
-
-class User(PTBaseModel):
+class UserModel(PTBaseModel):
     id: int
     email: str
     first_name: str

@@ -33,6 +33,30 @@ async def delete_index(klass: str) -> Any:
     return await ESService.delete_index(index=klass)
 
 
+async def get_by_field(klass: str, field_name: str, field_value: str) -> Any:
+    match = {}
+    match[field_name] = {
+        "query": field_value
+      }
+    body = {
+        "query": {
+    "match": match
+  }
+    }
+    resp_data = await ESService.search_docs(index=klass, body=body)
+    es_parsed_data = ESDataParser(resp_data)
+    data = es_parsed_data.hits_data_details
+    result = []
+
+    def cb(elem):
+        original_data = elem["_source"]
+        original_data["id"] = elem["_id"]
+        result.append(original_data)
+
+    pydash.for_each(data, cb)
+    return result
+
+
 async def get(klass: str, id: str) -> Any:
     resp_data = await ESService.get_doc(index=klass, id=id)
     es_parsed_data = ESDataParser(resp_data)
@@ -65,7 +89,7 @@ async def get_all(klass: str) -> Any:
     return result
 
 
-async def get_latest(klass: str) -> Any:
+async def get_lastest_doc(klass: str) -> Any:
     resp_data = await ESService.search_docs(
         index=klass,
         body={"size": 1, "sort": {"date": "desc"}, "query": {"match_all": {}}},
@@ -85,7 +109,6 @@ async def get_latest(klass: str) -> Any:
 
 
 async def update(klass: str, id: str, **update_kwargs) -> Any:
-    print(update_kwargs)
     body={"query": {}}
     resp_data = await ESService.update_doc(index=klass, id=id, body=body)
     return resp_data
